@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pré-Agendamento de Estética</title>
+  
+  <!-- Fontes Premium do Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* -----------------------------------------
+       DESIGN SYSTEM & VARIAVEIS (Color Factory Vintage Cream)
+       ----------------------------------------- */
+    :root {
+      --bg-dark: #0A0A0C;
+      --bg-card: #141418;
+      --bg-card-hover: #1D1D24;
+      --border-color: #25252D;
+      
+      /* Tons Creme Vintage extraídos do logotipo da marca (image_d869e2.png) */
+      --rose-gold-light: #F4ECD8;
+      --rose-gold: #D5C39A;
+      --rose-gold-dark: #8D7B68;
+      --rose-gold-gradient: linear-gradient(135deg, #F4ECD8 0%, #8D7B68 100%);
+      
+      --text-main: #F4F4F6;
+      --text-muted: #9E9EAC;
+      --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Brilho sutil de fundo (Glow Orbs) baseado na nova paleta creme/bronze */
+    body::before {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(213, 195, 154, 0.08) 0%, rgba(0,0,0,0) 70%);
+      top: -50px;
+      left: -50px;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(141, 123, 104, 0.06) 0%, rgba(0,0,0,0) 70%);
+      bottom: -100px;
+      right: -100px;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Container Principal - Focado em Celular */
+    .app-card {
+      width: 100%;
+      max-width: 420px;
+      min-height: 100vh;
+      background-color: var(--bg-dark);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+      padding: 24px;
+    }
+
+    @media (min-width: 480px) {
+      .app-card {
+        min-height: auto;
+        height: 720px;
+        border-radius: 32px;
+        border: 1px solid var(--border-color);
+        background-color: var(--bg-card);
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+        overflow: hidden;
+      }
+    }
+
+    /* -----------------------------------------
+       CABECALHO & MARCA
+       ----------------------------------------- */
+    header {
+      text-align: center;
+      margin-top: 16px;
+      margin-bottom: 32px;
+    }
+
+    .brand-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.15em;
+      color: var(--text-main);
+      font-weight: 600;
+      text-transform: uppercase;
+      background: var(--rose-gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+
+    .brand-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    /* -----------------------------------------
+       BARRA DE PROGRESSO
+       ----------------------------------------- */
+    .progress-wrapper {
+      margin-bottom: 40px;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .progress-bar-bg {
+      height: 4px;
+      background-color: var(--border-color);
+      border-radius: 10px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 33%;
+      background: var(--rose-gold-gradient);
+      border-radius: 10px;
+      transition: var(--transition-smooth);
+    }
+
+    /* -----------------------------------------
+       MÁQUINA DOS PASSOS (FLUXO)
+       ----------------------------------------- */
+    .steps-container {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .step-view {
+      display: none;
+      opacity: 0;
+      transform: translateX(30px);
+      transition: var(--transition-smooth);
+      height: 100%;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 1;
+    }
+
+    .step-view.active {
+      display: flex;
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Animação para saída elegante */
+    .step-view.exit {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+
+    .step-title {
+      font-size: 1.35rem;
+      font-weight: 500;
+      color: var(--text-main);
+      line-height: 1.4;
+      margin-bottom: 24px;
+    }
+
+    .step-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    /* -----------------------------------------
+       INPUTS & COMPONENTES DE INTERAÇÃO
+       ----------------------------------------- */
+    
+    /* Passo 1 - Input de Nome */
+    .input-wrapper {
+      position: relative;
+      margin-top: 20px;
+    }
+
+    .premium-input {
+      width: 100%;
+      background-color: transparent;
+      border: none;
+      border-bottom: 1.5px solid var(--border-color);
+      padding: 16px 4px;
+      font-family: inherit;
+      font-size: 1.15rem;
+      color: var(--text-main);
+      outline: none;
+      transition: var(--transition-smooth);
+    }
+
+    .premium-input:focus {
+      border-color: var(--rose-gold);
+    }
+
+    /* Mensagem de Erro Inline */
+    .validation-error {
+      color: #E07A5F;
+      font-size: 0.8rem;
+      margin-top: 8px;
+      display: none;
+      opacity: 0;
+      transition: var(--transition-smooth);
+    }
+
+    /* Passo 2 e 3 - Seletores em Grid/Lista */
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .option-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 20px;
+      border-radius: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: var(--transition-smooth);
+    }
+
+    /* Detalhes para o container no desktop */
+    @media (min-width: 480px) {
+      .option-card {
+        background-color: rgba(255, 255, 255, 0.02);
+      }
+    }
+
+    .option-card:hover {
+      background-color: var(--bg-card-hover);
+      border-color: rgba(213, 195, 154, 0.3);
+    }
+
+    .option-card.selected {
+      background-color: rgba(213, 195, 154, 0.08);
+      border-color: var(--rose-gold);
+      box-shadow: 0 0 16px rgba(213, 195, 154, 0.1);
+    }
+
+    .option-text {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .option-radio {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-smooth);
+    }
+
+    .option-card.selected .option-radio {
+      border-color: var(--rose-gold);
+    }
+
+    .option-card.selected .option-radio::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--rose-gold-gradient);
+    }
+
+    /* Subtexto para os períodos */
+    .option-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* -----------------------------------------
+       BOTOES & NAVEGAÇÃO
+       ----------------------------------------- */
+    .button-group {
+      margin-top: 32px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn {
+      font-family: inherit;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-smooth);
+      height: 56px;
+    }
+
+    .btn-primary {
+      flex: 1;
+      background: var(--rose-gold-gradient);
+      color: #120A07;
+      box-shadow: 0 8px 24px rgba(213, 195, 154, 0.25);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.97);
+      box-shadow: 0 4px 12px rgba(213, 195, 154, 0.15);
+    }
+
+    .btn-secondary {
+      width: 56px;
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+
+    .btn-secondary:active {
+      background-color: var(--bg-card-hover);
+    }
+
+    /* -----------------------------------------
+       TELA DE RESUMO FINAL
+       ----------------------------------------- */
+    .summary-box {
+      background-color: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .summary-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .summary-item:first-child {
+      padding-top: 0;
+    }
+
+    .summary-label {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .summary-value {
+      font-weight: 600;
+      color: var(--text-main);
+      font-size: 1rem;
+    }
+
+    .brand-accent {
+      color: var(--rose-gold);
+    }
+
+    /* Ícone de Sucesso animado */
+    .success-icon-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background-color: rgba(213, 195, 154, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(213, 195, 154, 0.3);
+    }
+
+    .success-icon svg {
+      width: 28px;
+      height: 28px;
+      color: var(--rose-gold);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-card">
+    <!-- Cabeçalho -->
+    <header>
+      <div class="brand-title">COLOR FACTORY</div>
+      <div class="brand-subtitle">Estética Avançada</div>
+    </header>
+
+    <!-- Barra de Progresso Superior -->
+    <div class="progress-wrapper">
+      <div class="progress-info">
+        <span>Pré-Agendamento</span>
+        <span id="progress-text">Etapa 1 de 3</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-indicator"></div>
+      </div>
+    </div>
+
+    <!-- Container Dinâmico de Passos -->
+    <div class="steps-container">
+      
+      <!-- PASSO 1: Nome Completo -->
+      <div class="step-view active" id="view-step-1">
+        <div class="step-content">
+          <h2 class="step-title">Olá! Para iniciarmos sua triagem, por favor digite seu <span class="brand-accent">nome completo</span>:</h2>
+          <div class="input-wrapper">
+            <input 
+              type="text" 
+              id="input-name" 
+              class="premium-input" 
+              placeholder="Ex: Amanda Silva" 
+              autocomplete="name"
+              required
+            >
+            <div id="name-error" class="validation-error">Por favor, insira seu nome completo para prosseguir.</div>
+          </div>
+        </div>
+        
+        <div class="button-group">
+          <!-- Avançar do passo 1 não precisa de botão voltar -->
+          <button type="button" class="btn btn-primary" onclick="nextStep(1)">
+            Continuar
+          </button>
+        </div>
+      </div>
+
+      <!-- PASSO 2: Seleção de Procedimento -->
+      <div class="step-view" id="view-step-2">
+        <div class="step-content">
+          <h2 class="step-title">Qual <span class="brand-accent">procedimento</span> deseja agendar hoje?</h2>
+          
+          <div class="options-grid">
+            <div class="option-card" onclick="selectProcedure('Cílios', this)">
+              <span class="option-text">Cílios</span>
+              <div class="option-radio"></div>
+            </div>
+            <div class="option-card" onclick="selectProcedure('Sobrancelha', this)">
+              <span class="option-text">Sobrancelha</span>
+              <div class="option-radio"></div>
+            </div>
+            <div class="option-card" onclick="selectProcedure('Micropigmentação', this)">
+              <span class="option-text">Micropigmentação</span>
+              <div class="option-radio"></div>
+            </div>
+            <div class="option-card" onclick="selectProcedure('Outros', this)">
+              <span class="option-text">Outros / Não sei ao certo</span>
+              <div class="option-radio"></div>
+            </div>
+          </div>
+          <div id="procedure-error" class="validation-error" style="margin-top: 16px;">Escolha uma das opções acima para avançar.</div>
+        </div>
+        
+        <div class="button-group">
+          <button type="button" class="btn btn-secondary" onclick="prevStep(2)">
+            <!-- Ícone de Seta de Voltar -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <button type="button" class="btn btn-primary" onclick="nextStep(2)">
+            Continuar
+          </button>
+        </div>
+      </div>
+
+      <!-- PASSO 3: Período do Dia -->
+      <div class="step-view" id="view-step-3">
+        <div class="step-content">
+          <h2 class="step-title">Qual o <span class="brand-accent">melhor período</span> para seu atendimento?</h2>
+          
+          <div class="options-grid">
+            <div class="option-card" onclick="selectPeriod('Manhã', this)">
+              <div>
+                <span class="option-text">Manhã</span>
+                <div class="option-subtitle">Geralmente entre 08h e 12h</div>
+              </div>
+              <div class="option-radio"></div>
+            </div>
+            <div class="option-card" onclick="selectPeriod('Tarde', this)">
+              <div>
+                <span class="option-text">Tarde</span>
+                <div class="option-subtitle">Geralmente entre 13h e 18h</div>
+              </div>
+              <div class="option-radio"></div>
+            </div>
+          </div>
+          <div id="period-error" class="validation-error" style="margin-top: 16px;">Escolha um período para prosseguir.</div>
+        </div>
+        
+        <div class="button-group">
+          <button type="button" class="btn btn-secondary" onclick="prevStep(3)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <button type="button" class="btn btn-primary" onclick="nextStep(3)">
+            Visualizar Resumo
+          </button>
+        </div>
+      </div>
+
+      <!-- PASSO FINAL: Resumo & Confirmação -->
+      <div class="step-view" id="view-step-summary">
+        <div class="step-content">
+          <div class="success-icon-wrapper">
+            <div class="success-icon">
+              <!-- Ícone Checkmark -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+          </div>
+          <h2 class="step-title" style="text-align: center; margin-bottom: 12px;">Tudo pronto para seu agendamento!</h2>
+          <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">Confirme os dados antes de enviar sua solicitação diretamente ao nosso WhatsApp.</p>
+          
+          <div class="summary-box">
+            <div class="summary-item">
+              <span class="summary-label">Cliente</span>
+              <span class="summary-value" id="summary-name">-</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Procedimento</span>
+              <span class="summary-value" id="summary-procedure">-</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Período</span>
+              <span class="summary-value" id="summary-period">-</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="button-group">
+          <button type="button" class="btn btn-secondary" onclick="prevStep(4)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          </button>
+          <button type="button" class="btn btn-primary" onclick="sendToWhatsApp()">
+            Confirmar e Agendar
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    /* -----------------------------------------
+       CONFIGURAÇÃO DO WHATSAPP (FÁCIL ALTERAÇÃO)
+       ----------------------------------------- */
+    // Atualizado com o número de produção do cliente (DDD 41 + 9 dígitos)
+    const WHATSAPP_NUMBER = "5541985278909";
+
+    /* -----------------------------------------
+       ESTADO DA APLICAÇÃO & CONTROLE DO FORMULÁRIO
+       ----------------------------------------- */
+    const state = {
+      name: '',
+      procedure: '',
+      period: ''
+    };
+
+    let currentStep = 1;
+
+    // Elementos da barra de progresso
+    const progressText = document.getElementById('progress-text');
+    const progressIndicator = document.getElementById('progress-indicator');
+
+    // Listener para o botão 'Enter' no campo de Nome
+    document.getElementById('input-name').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        nextStep(1);
+      }
+    });
+
+    /**
+     * Limpa mensagens de erro ao digitar ou selecionar novas opções
+     */
+    document.getElementById('input-name').addEventListener('input', () => {
+      hideError('name-error');
+    });
+
+    /**
+     * Seleciona o procedimento no Passo 2
+     */
+    function selectProcedure(procedureValue, cardElement) {
+      // Remove a classe selecionada de todos os cartões deste passo
+      const cards = document.querySelectorAll('#view-step-2 .option-card');
+      cards.forEach(card => card.classList.remove('selected'));
+      
+      // Adiciona classe no cartão clicado
+      cardElement.classList.add('selected');
+      state.procedure = procedureValue;
+      
+      hideError('procedure-error');
+
+      // Auto-avança após uma breve animação para melhorar a experiência do usuário
+      setTimeout(() => {
+        if (currentStep === 2) {
+          nextStep(2);
+        }
+      }, 350);
+    }
+
+    /**
+     * Seleciona o período no Passo 3
+     */
+    function selectPeriod(periodValue, cardElement) {
+      const cards = document.querySelectorAll('#view-step-3 .option-card');
+      cards.forEach(card => card.classList.remove('selected'));
+      
+      cardElement.classList.add('selected');
+      state.period = periodValue;
+      
+      hideError('period-error');
+
+      setTimeout(() => {
+        if (currentStep === 3) {
+          nextStep(3);
+        }
+      }, 350);
+    }
+
+    /**
+     * Atualiza visualmente a barra de progresso
+     */
+    function updateProgressBar() {
+      let progressPercentage = 33;
+      let labelText = "Etapa 1 de 3";
+
+      if (currentStep === 1) {
+        progressPercentage = 33;
+        labelText = "Etapa 1 de 3";
+      } else if (currentStep === 2) {
+        progressPercentage = 66;
+        labelText = "Etapa 2 de 3";
+      } else if (currentStep === 3) {
+        progressPercentage = 100;
+        labelText = "Etapa 3 de 3";
+      } else if (currentStep === 4) {
+        progressPercentage = 100;
+        labelText = "Confirmação";
+      }
+
+      progressIndicator.style.width = `${progressPercentage}%`;
+      progressText.textContent = labelText;
+    }
+
+    /**
+     * Valida os passos antes de avançar
+     */
+    function validateStep(step) {
+      if (step === 1) {
+        const nameInput = document.getElementById('input-name').value.trim();
+        if (nameInput.length < 3) {
+          showError('name-error');
+          return false;
+        }
+        state.name = nameInput;
+        return true;
+      }
+      
+      if (step === 2) {
+        if (!state.procedure) {
+          showError('procedure-error');
+          return false;
+        }
+        return true;
+      }
+
+      if (step === 3) {
+        if (!state.period) {
+          showError('period-error');
+          return false;
+        }
+        return true;
+      }
+
+      return true;
+    }
+
+    /**
+     * Exibe o feedback de erro esteticamente
+     */
+    function showError(elementId) {
+      const errorElement = document.getElementById(elementId);
+      errorElement.style.display = 'block';
+      setTimeout(() => {
+        errorElement.style.opacity = '1';
+      }, 10);
+    }
+
+    /**
+     * Oculta o feedback de erro
+     */
+    function hideError(elementId) {
+      const errorElement = document.getElementById(elementId);
+      errorElement.style.opacity = '0';
+      setTimeout(() => {
+        errorElement.style.display = 'none';
+      }, 200);
+    }
+
+    /**
+     * Exibe o resumo final coletado antes do redirecionamento
+     */
+    function populateSummary() {
+      document.getElementById('summary-name').textContent = state.name;
+      document.getElementById('summary-procedure').textContent = state.procedure;
+      document.getElementById('summary-period').textContent = state.period;
+    }
+
+    /**
+     * Avança para o próximo passo com transição animada
+     */
+    function nextStep(step) {
+      if (!validateStep(step)) return;
+
+      const currentView = document.getElementById(step === 4 ? 'view-step-summary' : `view-step-${step}`);
+      const nextView = document.getElementById((step + 1) === 4 ? 'view-step-summary' : `view-step-${step + 1}`);
+
+      currentView.classList.add('exit');
+      
+      setTimeout(() => {
+        currentView.classList.remove('active', 'exit');
+        nextView.classList.add('active');
+        
+        currentStep = step + 1;
+        updateProgressBar();
+        
+        if (currentStep === 4) {
+          populateSummary();
+        }
+      }, 300);
+    }
+
+    /**
+     * Retorna ao passo anterior com transição suave
+     */
+    function prevStep(step) {
+      // O passo anterior do resumo (passo 4) é o passo 3
+      const previousView = document.getElementById((step - 1) === 4 ? 'view-step-summary' : `view-step-${step - 1}`);
+      const currentView = document.getElementById(step === 4 ? 'view-step-summary' : `view-step-${step}`);
+
+      currentView.classList.add('exit');
+      
+      setTimeout(() => {
+        currentView.classList.remove('active', 'exit');
+        previousView.classList.add('active');
+        
+        currentStep = step - 1;
+        updateProgressBar();
+      }, 300);
+    }
+
+    /**
+     * Formata os dados e redireciona ao WhatsApp usando o método mais eficiente de produção (window.location.href)
+     */
+    function sendToWhatsApp() {
+      // Texto de triagem formatado exatamente como solicitado originalmente
+      const message = `📋 PRÉ-AGENDAMENTO\n• Cliente: ${state.name}\n• Procedimento: ${state.procedure}\n• Período: ${state.period}`;
+      
+      // Codifica caracteres para a URL
+      const encodedMessage = encodeURIComponent(message);
+      
+      // Monta e redireciona para a URL do WhatsApp
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
+      
+      window.location.href = url;
+    }
+  </script>
+</body>
+</html>

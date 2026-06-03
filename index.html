@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pré-Agendamento de Estética</title>
+  <title>Solicitação de Sessão - Tattoo & Piercing</title>
   
   <!-- Fontes Premium do Google -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,7 +12,7 @@
   
   <style>
     /* -----------------------------------------
-       DESIGN SYSTEM & VARIAVEIS (Color Factory Vintage Cream)
+       DESIGN SYSTEM & VARIAVEIS (Tattoo Dark Red)
        ----------------------------------------- */
     :root {
       --bg-dark: #0A0A0C;
@@ -20,11 +20,11 @@
       --bg-card-hover: #1D1D24;
       --border-color: #25252D;
       
-      /* Tons Creme Vintage extraídos do logotipo da marca (image_d869e2.png) */
-      --rose-gold-light: #F4ECD8;
-      --rose-gold: #D5C39A;
-      --rose-gold-dark: #8D7B68;
-      --rose-gold-gradient: linear-gradient(135deg, #F4ECD8 0%, #8D7B68 100%);
+      /* Tons Creme e Bronze Vintage (Baseados no logo Color Factory) */
+      --rose-gold-light: #F7EAD7;
+      --rose-gold: #D9BA8F;
+      --rose-gold-dark: #8C6C47;
+      --rose-gold-gradient: linear-gradient(135deg, #F7EAD7 0%, #8C6C47 100%);
       
       --text-main: #F4F4F6;
       --text-muted: #9E9EAC;
@@ -50,13 +50,13 @@
       position: relative;
     }
 
-    /* Brilho sutil de fundo (Glow Orbs) baseado na nova paleta creme/bronze */
+    /* Brilho sutil de fundo (Glow Orbs) para atmosfera underground e sofisticada */
     body::before {
       content: '';
       position: absolute;
       width: 300px;
       height: 300px;
-      background: radial-gradient(circle, rgba(213, 195, 154, 0.08) 0%, rgba(0,0,0,0) 70%);
+      background: radial-gradient(circle, rgba(217, 186, 143, 0.08) 0%, rgba(0,0,0,0) 70%);
       top: -50px;
       left: -50px;
       z-index: 0;
@@ -68,13 +68,16 @@
       position: absolute;
       width: 400px;
       height: 400px;
-      background: radial-gradient(circle, rgba(141, 123, 104, 0.06) 0%, rgba(0,0,0,0) 70%);
+      background: radial-gradient(circle, rgba(140, 108, 71, 0.06) 0%, rgba(0,0,0,0) 70%);
       bottom: -100px;
       right: -100px;
       z-index: 0;
       pointer-events: none;
     }
 
+    /* -----------------------------------------
+       STREAMING_CHUNK: Estrutura do card e cabeçalho do estúdio
+       ----------------------------------------- */
     /* Container Principal - Focado em Celular */
     .app-card {
       width: 100%;
@@ -100,9 +103,7 @@
       }
     }
 
-    /* -----------------------------------------
-       CABECALHO & MARCA
-       ----------------------------------------- */
+    /* CABECALHO & MARCA */
     header {
       text-align: center;
       margin-top: 16px;
@@ -130,8 +131,9 @@
     }
 
     /* -----------------------------------------
-       BARRA DE PROGRESSO
+       STREAMING_CHUNK: Barra de progresso e máquina de passos
        ----------------------------------------- */
+    /* BARRA DE PROGRESSO */
     .progress-wrapper {
       margin-bottom: 40px;
     }
@@ -163,9 +165,7 @@
       transition: var(--transition-smooth);
     }
 
-    /* -----------------------------------------
-       MÁQUINA DOS PASSOS (FLUXO)
-       ----------------------------------------- */
+    /* MÁQUINA DOS PASSOS (FLUXO) */
     .steps-container {
       flex: 1;
       position: relative;
@@ -190,7 +190,6 @@
       transform: translateX(0);
     }
 
-    /* Animação para saída elegante */
     .step-view.exit {
       opacity: 0;
       transform: translateX(-30px);
@@ -212,9 +211,8 @@
     }
 
     /* -----------------------------------------
-       INPUTS & COMPONENTES DE INTERAÇÃO
+       STREAMING_CHUNK: Customização estética de inputs e cards de opções
        ----------------------------------------- */
-    
     /* Passo 1 - Input de Nome */
     .input-wrapper {
       position: relative;
@@ -240,7 +238,7 @@
 
     /* Mensagem de Erro Inline */
     .validation-error {
-      color: #E07A5F;
+      color: #FF6B6B;
       font-size: 0.8rem;
       margin-top: 8px;
       display: none;
@@ -268,7 +266,6 @@
       transition: var(--transition-smooth);
     }
 
-    /* Detalhes para o container no desktop */
     @media (min-width: 480px) {
       .option-card {
         background-color: rgba(255, 255, 255, 0.02);
@@ -277,13 +274,13 @@
 
     .option-card:hover {
       background-color: var(--bg-card-hover);
-      border-color: rgba(213, 195, 154, 0.3);
+      border-color: rgba(217, 186, 143, 0.3);
     }
 
     .option-card.selected {
-      background-color: rgba(213, 195, 154, 0.08);
+      background-color: rgba(217, 186, 143, 0.08);
       border-color: var(--rose-gold);
-      box-shadow: 0 0 16px rgba(213, 195, 154, 0.1);
+      box-shadow: 0 0 16px rgba(217, 186, 143, 0.1);
     }
 
     .option-text {
@@ -315,7 +312,6 @@
       background: var(--rose-gold-gradient);
     }
 
-    /* Subtexto para os períodos */
     .option-subtitle {
       font-size: 0.75rem;
       color: var(--text-muted);
@@ -323,8 +319,9 @@
     }
 
     /* -----------------------------------------
-       BOTOES & NAVEGAÇÃO
+       STREAMING_CHUNK: Estilização de botões e tela de resumo final
        ----------------------------------------- */
+    /* BOTOES & NAVEGAÇÃO */
     .button-group {
       margin-top: 32px;
       display: flex;
@@ -350,13 +347,13 @@
     .btn-primary {
       flex: 1;
       background: var(--rose-gold-gradient);
-      color: #120A07;
-      box-shadow: 0 8px 24px rgba(213, 195, 154, 0.25);
+      color: #0A0A0C;
+      box-shadow: 0 8px 24px rgba(217, 186, 143, 0.25);
     }
 
     .btn-primary:active {
       transform: scale(0.97);
-      box-shadow: 0 4px 12px rgba(213, 195, 154, 0.15);
+      box-shadow: 0 4px 12px rgba(217, 186, 143, 0.15);
     }
 
     .btn-secondary {
@@ -370,9 +367,7 @@
       background-color: var(--bg-card-hover);
     }
 
-    /* -----------------------------------------
-       TELA DE RESUMO FINAL
-       ----------------------------------------- */
+    /* TELA DE RESUMO FINAL */
     .summary-box {
       background-color: rgba(255, 255, 255, 0.02);
       border: 1px solid var(--border-color);
@@ -426,11 +421,11 @@
       width: 64px;
       height: 64px;
       border-radius: 50%;
-      background-color: rgba(213, 195, 154, 0.1);
+      background-color: rgba(217, 186, 143, 0.1);
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(213, 195, 154, 0.3);
+      border: 1px solid rgba(217, 186, 143, 0.3);
     }
 
     .success-icon svg {
@@ -446,7 +441,7 @@
     <!-- Cabeçalho -->
     <header>
       <div class="brand-title">COLOR FACTORY</div>
-      <div class="brand-subtitle">Estética Avançada</div>
+      <div class="brand-subtitle">TATTOO & PIERCING</div>
     </header>
 
     <!-- Barra de Progresso Superior -->
@@ -466,7 +461,7 @@
       <!-- PASSO 1: Nome Completo -->
       <div class="step-view active" id="view-step-1">
         <div class="step-content">
-          <h2 class="step-title">Olá! Para iniciarmos sua triagem, por favor digite seu <span class="brand-accent">nome completo</span>:</h2>
+          <h2 class="step-title">Olá! Para organizarmos a sua ideia, digite seu <span class="brand-accent">nome completo</span>:</h2>
           <div class="input-wrapper">
             <input 
               type="text" 
@@ -481,33 +476,32 @@
         </div>
         
         <div class="button-group">
-          <!-- Avançar do passo 1 não precisa de botão voltar -->
           <button type="button" class="btn btn-primary" onclick="nextStep(1)">
             Continuar
           </button>
         </div>
       </div>
 
-      <!-- PASSO 2: Seleção de Procedimento -->
+      <!-- PASSO 2: Seleção de Procedimento (Idéia) -->
       <div class="step-view" id="view-step-2">
         <div class="step-content">
-          <h2 class="step-title">Qual <span class="brand-accent">procedimento</span> deseja agendar hoje?</h2>
+          <h2 class="step-title">O que você <span class="brand-accent">deseja fazer</span> hoje?</h2>
           
           <div class="options-grid">
-            <div class="option-card" onclick="selectProcedure('Cílios', this)">
-              <span class="option-text">Cílios</span>
+            <div class="option-card" onclick="selectProcedure('Nova Tatuagem', this)">
+              <span class="option-text">Nova Tatuagem</span>
               <div class="option-radio"></div>
             </div>
-            <div class="option-card" onclick="selectProcedure('Sobrancelha', this)">
-              <span class="option-text">Sobrancelha</span>
+            <div class="option-card" onclick="selectProcedure('Retoque / Cobertura', this)">
+              <span class="option-text">Retoque / Cobertura</span>
               <div class="option-radio"></div>
             </div>
-            <div class="option-card" onclick="selectProcedure('Micropigmentação', this)">
-              <span class="option-text">Micropigmentação</span>
+            <div class="option-card" onclick="selectProcedure('Body Piercing', this)">
+              <span class="option-text">Body Piercing</span>
               <div class="option-radio"></div>
             </div>
-            <div class="option-card" onclick="selectProcedure('Outros', this)">
-              <span class="option-text">Outros / Não sei ao certo</span>
+            <div class="option-card" onclick="selectProcedure('Outros / Idéia Geral', this)">
+              <span class="option-text">Outros / Idéia Geral</span>
               <div class="option-radio"></div>
             </div>
           </div>
@@ -516,7 +510,6 @@
         
         <div class="button-group">
           <button type="button" class="btn btn-secondary" onclick="prevStep(2)">
-            <!-- Ícone de Seta de Voltar -->
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
           </button>
           <button type="button" class="btn btn-primary" onclick="nextStep(2)">
@@ -528,7 +521,7 @@
       <!-- PASSO 3: Período do Dia -->
       <div class="step-view" id="view-step-3">
         <div class="step-content">
-          <h2 class="step-title">Qual o <span class="brand-accent">melhor período</span> para seu atendimento?</h2>
+          <h2 class="step-title">Qual o <span class="brand-accent">melhor período</span> para a sua sessão?</h2>
           
           <div class="options-grid">
             <div class="option-card" onclick="selectPeriod('Manhã', this)">
@@ -564,12 +557,11 @@
         <div class="step-content">
           <div class="success-icon-wrapper">
             <div class="success-icon">
-              <!-- Ícone Checkmark -->
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
             </div>
           </div>
-          <h2 class="step-title" style="text-align: center; margin-bottom: 12px;">Tudo pronto para seu agendamento!</h2>
-          <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">Confirme os dados antes de enviar sua solicitação diretamente ao nosso WhatsApp.</p>
+          <h2 class="step-title" style="text-align: center; margin-bottom: 12px;">Tudo pronto para a sua sessão!</h2>
+          <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">Confirme os dados antes de enviar a ideia direto para o WhatsApp do tatuador.</p>
           
           <div class="summary-box">
             <div class="summary-item">
@@ -577,7 +569,7 @@
               <span class="summary-value" id="summary-name">-</span>
             </div>
             <div class="summary-item">
-              <span class="summary-label">Procedimento</span>
+              <span class="summary-label">Idéia</span>
               <span class="summary-value" id="summary-procedure">-</span>
             </div>
             <div class="summary-item">
@@ -604,8 +596,8 @@
     /* -----------------------------------------
        CONFIGURAÇÃO DO WHATSAPP (FÁCIL ALTERAÇÃO)
        ----------------------------------------- */
-    // Atualizado com o número de produção do cliente (DDD 41 + 9 dígitos)
-    const WHATSAPP_NUMBER = "5541985278909";
+    // Altere para o seu número com DDD (apenas números, incluindo código do país '55')
+    const WHATSAPP_NUMBER = "554185278909";
 
     /* -----------------------------------------
        ESTADO DA APLICAÇÃO & CONTROLE DO FORMULÁRIO
@@ -618,39 +610,31 @@
 
     let currentStep = 1;
 
-    // Elementos da barra de progresso
     const progressText = document.getElementById('progress-text');
     const progressIndicator = document.getElementById('progress-indicator');
 
-    // Listener para o botão 'Enter' no campo de Nome
     document.getElementById('input-name').addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         nextStep(1);
       }
     });
 
-    /**
-     * Limpa mensagens de erro ao digitar ou selecionar novas opções
-     */
     document.getElementById('input-name').addEventListener('input', () => {
       hideError('name-error');
     });
 
     /**
-     * Seleciona o procedimento no Passo 2
+     * Seleciona o procedimento (Idéia) no Passo 2
      */
     function selectProcedure(procedureValue, cardElement) {
-      // Remove a classe selecionada de todos os cartões deste passo
       const cards = document.querySelectorAll('#view-step-2 .option-card');
       cards.forEach(card => card.classList.remove('selected'));
       
-      // Adiciona classe no cartão clicado
       cardElement.classList.add('selected');
       state.procedure = procedureValue;
       
       hideError('procedure-error');
 
-      // Auto-avança após uma breve animação para melhorar a experiência do usuário
       setTimeout(() => {
         if (currentStep === 2) {
           nextStep(2);
@@ -735,9 +719,6 @@
       return true;
     }
 
-    /**
-     * Exibe o feedback de erro esteticamente
-     */
     function showError(elementId) {
       const errorElement = document.getElementById(elementId);
       errorElement.style.display = 'block';
@@ -746,9 +727,6 @@
       }, 10);
     }
 
-    /**
-     * Oculta o feedback de erro
-     */
     function hideError(elementId) {
       const errorElement = document.getElementById(elementId);
       errorElement.style.opacity = '0';
@@ -757,18 +735,12 @@
       }, 200);
     }
 
-    /**
-     * Exibe o resumo final coletado antes do redirecionamento
-     */
     function populateSummary() {
       document.getElementById('summary-name').textContent = state.name;
       document.getElementById('summary-procedure').textContent = state.procedure;
       document.getElementById('summary-period').textContent = state.period;
     }
 
-    /**
-     * Avança para o próximo passo com transição animada
-     */
     function nextStep(step) {
       if (!validateStep(step)) return;
 
@@ -790,11 +762,7 @@
       }, 300);
     }
 
-    /**
-     * Retorna ao passo anterior com transição suave
-     */
     function prevStep(step) {
-      // O passo anterior do resumo (passo 4) é o passo 3
       const previousView = document.getElementById((step - 1) === 4 ? 'view-step-summary' : `view-step-${step - 1}`);
       const currentView = document.getElementById(step === 4 ? 'view-step-summary' : `view-step-${step}`);
 
@@ -810,18 +778,18 @@
     }
 
     /**
-     * Formata os dados e redireciona ao WhatsApp usando o método mais eficiente de produção (window.location.href)
+     * Formata os dados no formato de Tattoo solicitado e redireciona ao WhatsApp usando window.location.href
      */
     function sendToWhatsApp() {
-      // Texto de triagem formatado exatamente como solicitado originalmente
-      const message = `📋 PRÉ-AGENDAMENTO\n• Cliente: ${state.name}\n• Procedimento: ${state.procedure}\n• Período: ${state.period}`;
+      // Texto de triagem formatado exatamente como solicitado (com as tags corretas de bold para WhatsApp)
+      const message = `📋 *SOLICITAÇÃO DE TATTOO*\n• *Cliente:* ${state.name}\n• *Idéia:* ${state.procedure}\n• *Período:* ${state.period}\n\n---\n_Gerado via Agendamento Inteligente._`;
       
-      // Codifica caracteres para a URL
       const encodedMessage = encodeURIComponent(message);
       
-      // Monta e redireciona para a URL do WhatsApp
+      // Monta a URL do WhatsApp
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
       
+      // Redirecionamento de alta confiabilidade em ambiente real
       window.location.href = url;
     }
   </script>
